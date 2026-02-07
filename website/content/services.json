@@ -1,0 +1,58 @@
+[
+  {
+    "id": "workflow-automation",
+    "title": "Workflow Automation",
+    "description": "Eliminate repetitive tasks and streamline your operations. We build custom automations for data entry, report generation, email sequences, and cross-platform workflows.",
+    "icon": "workflow",
+    "features": [
+      "Custom workflow design & implementation",
+      "Data entry & processing automation",
+      "Automated report generation",
+      "Cross-platform integrations (Zapier, Make, custom APIs)",
+      "Email & notification sequences"
+    ],
+    "color": "#3B82F6"
+  },
+  {
+    "id": "ai-chatbots",
+    "title": "AI Chatbots & Assistants",
+    "description": "Deploy intelligent conversational agents for customer service, sales qualification, onboarding, and internal knowledge management.",
+    "icon": "chatbot",
+    "features": [
+      "Customer service chatbots",
+      "Sales qualification assistants",
+      "Employee onboarding bots",
+      "Internal knowledge base agents",
+      "Multi-channel deployment (web, Slack, WhatsApp)"
+    ],
+    "color": "#8B5CF6"
+  },
+  {
+    "id": "content-automation",
+    "title": "Content Automation",
+    "description": "Generate, schedule, and distribute content at scale. From social media posts to newsletters to blog articles — powered by AI, guided by strategy.",
+    "icon": "content",
+    "features": [
+      "Social media content generation & scheduling",
+      "Newsletter automation",
+      "Blog & article writing assistance",
+      "Content repurposing across platforms",
+      "Brand voice consistency"
+    ],
+    "color": "#10B981"
+  },
+  {
+    "id": "custom-ai-integrations",
+    "title": "Custom AI Integrations",
+    "description": "Connect AI models to your existing tools and systems. We build the bridges between AI capabilities and your business operations.",
+    "icon": "integration",
+    "features": [
+      "API development & integration",
+      "AI model selection & fine-tuning",
+      "Database & CRM connections",
+      "Custom dashboard development",
+      "Legacy system modernization"
+    ],
+    "color": "#F59E0B"
+  }
+]

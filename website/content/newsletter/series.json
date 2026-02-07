@@ -1,0 +1,16 @@
+[
+  {
+    "id": "ai-automation-fundamentals",
+    "title": "AI Automation Fundamentals",
+    "description": "Everything you need to know about AI automation — from basic concepts to real-world implementation. A 4-week deep dive.",
+    "weeks": 4,
+    "status": "active",
+    "startDate": "2026-02-07",
+    "topics": [
+      "Week 1: What Is AI Automation & Why It Matters Now",
+      "Week 2: The Building Blocks — APIs, Workflows, and Agents",
+      "Week 3: Choosing the Right Tools for Your Business",
+      "Week 4: Building Your First Automation (Step by Step)"
+    ]
+  }
+]

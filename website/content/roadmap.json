@@ -1,0 +1,48 @@
+{
+  "currentFocus": "Foundation & Core Services",
+  "skills": [
+    {
+      "name": "AI Agent Development",
+      "status": "learning",
+      "progress": 60,
+      "description": "Building autonomous agents that can handle complex multi-step tasks"
+    },
+    {
+      "name": "Workflow Orchestration",
+      "status": "learning",
+      "progress": 75,
+      "description": "Designing reliable automation pipelines using the WAT framework"
+    },
+    {
+      "name": "API Integration",
+      "status": "proficient",
+      "progress": 85,
+      "description": "Connecting systems via REST APIs, webhooks, and custom connectors"
+    },
+    {
+      "name": "Prompt Engineering",
+      "status": "proficient",
+      "progress": 90,
+      "description": "Crafting effective prompts for consistent AI outputs"
+    },
+    {
+      "name": "Web Development",
+      "status": "learning",
+      "progress": 50,
+      "description": "Building modern web applications with Next.js and React"
+    },
+    {
+      "name": "Data Pipeline Design",
+      "status": "planned",
+      "progress": 20,
+      "description": "Processing and transforming data at scale for AI applications"
+    }
+  ],
+  "futureGoals": [
+    "Launch first 5 client projects",
+    "Build a library of reusable automation templates",
+    "Develop proprietary AI tools for common business needs",
+    "Create a community of AI automation learners",
+    "Expand service offerings based on market demand"
+  ]
+}
