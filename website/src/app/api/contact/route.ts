@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import { join } from "path";
+
+const GOOGLE_SCRIPT_URL =
+  process.env.GOOGLE_SCRIPT_URL ||
+  "https://script.google.com/macros/s/AKfycbwRqDGR2NILTco1-anFhhjJHSD9faoNwpxWbsSgW4_4ju7Q-8iYbvrKZLDQ1G1mcWlJXA/exec";
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,26 +17,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Store submission as a JSON file (automation tools can process these)
-    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-    const submissionsDir = join(process.cwd(), "..", ".tmp", "submissions");
-
-    await mkdir(submissionsDir, { recursive: true });
-    await writeFile(
-      join(submissionsDir, `${timestamp}-${name.replace(/\s+/g, "-").toLowerCase()}.json`),
-      JSON.stringify(
-        {
-          name,
-          email,
-          business: business || "Not specified",
-          service,
-          message,
-          submittedAt: new Date().toISOString(),
-        },
-        null,
-        2
-      )
-    );
+    // Send to Google Sheets
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name,
+        email,
+        business: business || "Not specified",
+        service,
+        message,
+      }),
+    });
 
     return NextResponse.json({ success: true });
   } catch (error) {

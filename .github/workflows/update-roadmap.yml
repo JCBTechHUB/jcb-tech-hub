@@ -1,0 +1,65 @@
+name: Update Roadmap
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "What to do"
+        required: true
+        type: choice
+        options:
+          - update-skill
+          - add-goal
+      skill_name:
+        description: "Skill name (for update-skill)"
+        required: false
+      progress:
+        description: "Progress percentage 0-100 (for update-skill)"
+        required: false
+      skill_status:
+        description: "Status (for update-skill)"
+        required: false
+        type: choice
+        options:
+          - learning
+          - proficient
+          - planned
+      goal:
+        description: "New goal text (for add-goal)"
+        required: false
+
+jobs:
+  update-roadmap:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Update roadmap
+        run: |
+          if [ "${{ github.event.inputs.action }}" = "update-skill" ]; then
+            CMD="python tools/update_roadmap.py --skill \"${{ github.event.inputs.skill_name }}\""
+            if [ -n "${{ github.event.inputs.progress }}" ]; then
+              CMD="$CMD --progress ${{ github.event.inputs.progress }}"
+            fi
+            if [ -n "${{ github.event.inputs.skill_status }}" ]; then
+              CMD="$CMD --status ${{ github.event.inputs.skill_status }}"
+            fi
+            eval $CMD
+          else
+            python tools/update_roadmap.py --add-goal "${{ github.event.inputs.goal }}"
+          fi
+
+      - name: Commit and push
+        run: |
+          git config user.name "JCB Tech Hub Bot"
+          git config user.email "bot@jcbtechhub.com"
+          git add -A
+          git diff --staged --quiet || git commit -m "Update roadmap"
+          git push || true

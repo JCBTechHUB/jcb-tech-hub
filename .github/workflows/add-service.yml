@@ -1,0 +1,52 @@
+name: Add Service
+
+on:
+  workflow_dispatch:
+    inputs:
+      title:
+        description: "Service title"
+        required: true
+      description:
+        description: "Service description (2-3 sentences)"
+        required: true
+      features:
+        description: "Features (comma-separated, e.g.: Feature 1, Feature 2, Feature 3)"
+        required: true
+      color:
+        description: "Card color (hex, e.g. #6366F1)"
+        required: false
+        default: "#6366F1"
+
+jobs:
+  add-service:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Add service
+        run: |
+          IFS=',' read -ra FEATURES <<< "${{ github.event.inputs.features }}"
+          FEATURE_ARGS=""
+          for f in "${FEATURES[@]}"; do
+            FEATURE_ARGS="$FEATURE_ARGS \"$(echo $f | xargs)\""
+          done
+          eval python tools/add_service.py \
+            --title "${{ github.event.inputs.title }}" \
+            --description "${{ github.event.inputs.description }}" \
+            --features $FEATURE_ARGS \
+            --color "${{ github.event.inputs.color }}"
+
+      - name: Commit and push
+        run: |
+          git config user.name "JCB Tech Hub Bot"
+          git config user.email "bot@jcbtechhub.com"
+          git add -A
+          git commit -m "Add service: ${{ github.event.inputs.title }}"
+          git push

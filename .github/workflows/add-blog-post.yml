@@ -1,0 +1,43 @@
+name: Add Blog Post
+
+on:
+  workflow_dispatch:
+    inputs:
+      title:
+        description: "Blog post title"
+        required: true
+      category:
+        description: "Post category"
+        required: false
+        default: "Company Update"
+      excerpt:
+        description: "Brief summary (1-2 sentences)"
+        required: true
+
+jobs:
+  add-blog-post:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Add blog post
+        run: |
+          python tools/add_blog_post.py \
+            --title "${{ github.event.inputs.title }}" \
+            --category "${{ github.event.inputs.category }}" \
+            --excerpt "${{ github.event.inputs.excerpt }}"
+
+      - name: Commit and push
+        run: |
+          git config user.name "JCB Tech Hub Bot"
+          git config user.email "bot@jcbtechhub.com"
+          git add -A
+          git commit -m "Add blog post: ${{ github.event.inputs.title }}"
+          git push

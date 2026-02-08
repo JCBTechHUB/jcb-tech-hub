@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile, readFile, mkdir } from "fs/promises";
-import { join } from "path";
+
+const GOOGLE_SCRIPT_URL =
+  process.env.GOOGLE_SCRIPT_URL ||
+  "https://script.google.com/macros/s/AKfycbwRqDGR2NILTco1-anFhhjJHSD9faoNwpxWbsSgW4_4ju7Q-8iYbvrKZLDQ1G1mcWlJXA/exec";
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,26 +15,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Store subscriber in a JSON file
-    const subscribersDir = join(process.cwd(), "..", ".tmp");
-    const subscribersFile = join(subscribersDir, "subscribers.json");
-
-    await mkdir(subscribersDir, { recursive: true });
-
-    let subscribers: string[] = [];
-    try {
-      const existing = await readFile(subscribersFile, "utf-8");
-      subscribers = JSON.parse(existing);
-    } catch {
-      // File doesn't exist yet
-    }
-
-    if (subscribers.includes(email)) {
-      return NextResponse.json({ success: true, message: "Already subscribed" });
-    }
-
-    subscribers.push(email);
-    await writeFile(subscribersFile, JSON.stringify(subscribers, null, 2));
+    // Send to Google Sheets (Subscribers tab)
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        type: "subscribe",
+        email,
+      }),
+    });
 
     return NextResponse.json({ success: true });
   } catch (error) {

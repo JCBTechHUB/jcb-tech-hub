@@ -1,0 +1,70 @@
+name: Add Project
+
+on:
+  workflow_dispatch:
+    inputs:
+      title:
+        description: "Project title"
+        required: true
+      client:
+        description: "Client name"
+        required: true
+      category:
+        description: "Service category"
+        required: true
+        type: choice
+        options:
+          - workflow-automation
+          - ai-chatbots
+          - content-automation
+          - custom-ai-integrations
+      challenge:
+        description: "The challenge/problem"
+        required: true
+      solution:
+        description: "How we solved it"
+        required: true
+      results:
+        description: "Results (comma-separated)"
+        required: true
+      status:
+        description: "Project status"
+        required: false
+        default: "Completed"
+
+jobs:
+  add-project:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Add project
+        run: |
+          IFS=',' read -ra RESULTS <<< "${{ github.event.inputs.results }}"
+          RESULT_ARGS=""
+          for r in "${RESULTS[@]}"; do
+            RESULT_ARGS="$RESULT_ARGS \"$(echo $r | xargs)\""
+          done
+          eval python tools/add_project.py \
+            --title "${{ github.event.inputs.title }}" \
+            --client "${{ github.event.inputs.client }}" \
+            --category "${{ github.event.inputs.category }}" \
+            --challenge "${{ github.event.inputs.challenge }}" \
+            --solution "${{ github.event.inputs.solution }}" \
+            --results $RESULT_ARGS \
+            --status "${{ github.event.inputs.status }}"
+
+      - name: Commit and push
+        run: |
+          git config user.name "JCB Tech Hub Bot"
+          git config user.email "bot@jcbtechhub.com"
+          git add -A
+          git commit -m "Add project: ${{ github.event.inputs.title }}"
+          git push
