@@ -26,7 +26,10 @@ export default function ContactPage() {
     try {
       const res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
         body: JSON.stringify({
           access_key: "49d831dc-cdee-47ba-bddb-d71ec1495c45",
           subject: `New Lead: ${data.service} — ${data.name}`,
