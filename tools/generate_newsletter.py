@@ -1,14 +1,14 @@
 """
 Tool: Generate Newsletter (AI-Powered)
-Uses the Anthropic API (Claude) to write a newsletter issue based on
+Uses the Groq API (free) to write a newsletter issue based on
 the current series topic plan.
 
 Usage:
     python tools/generate_newsletter.py
 
 Requires:
-    ANTHROPIC_API_KEY environment variable
-    pip install anthropic
+    GROQ_API_KEY environment variable
+    pip install groq
 """
 
 import json
@@ -48,20 +48,20 @@ def count_published_issues(series_id: str) -> int:
 
 
 def generate_content(series: dict, week: int, topic: str) -> str:
-    """Use Claude to generate the newsletter content."""
+    """Use Groq (Llama 3.3) to generate the newsletter content."""
     try:
-        import anthropic
+        from groq import Groq
     except ImportError:
-        print("Installing anthropic package...")
-        os.system(f"{sys.executable} -m pip install anthropic")
-        import anthropic
+        print("Installing groq package...")
+        os.system(f"{sys.executable} -m pip install groq")
+        from groq import Groq
 
-    api_key = os.environ.get("ANTHROPIC_API_KEY")
+    api_key = os.environ.get("GROQ_API_KEY")
     if not api_key:
-        print("ERROR: ANTHROPIC_API_KEY not set.")
+        print("ERROR: GROQ_API_KEY not set.")
         sys.exit(1)
 
-    client = anthropic.Anthropic(api_key=api_key)
+    client = Groq(api_key=api_key)
 
     prompt = f"""Write a newsletter issue for JCB Tech Hub's AI Automation Academy.
 
@@ -84,13 +84,14 @@ Guidelines:
 
 Output the content in clean markdown format."""
 
-    message = client.messages.create(
-        model="claude-sonnet-4-5-20250929",
-        max_tokens=2000,
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
         messages=[{"role": "user", "content": prompt}],
+        max_tokens=2000,
+        temperature=0.7,
     )
 
-    return message.content[0].text
+    return response.choices[0].message.content
 
 
 def main():
