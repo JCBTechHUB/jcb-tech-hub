@@ -24,26 +24,25 @@ export default function ContactPage() {
     const data = Object.fromEntries(formData.entries());
 
     try {
-      const res = await fetch("https://api.web3forms.com/submit", {
+      const res = await fetch("https://formsubmit.co/ajax/jcbtechhub@gmail.com", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
         body: JSON.stringify({
-          access_key: "49d831dc-cdee-47ba-bddb-d71ec1495c45",
-          subject: `New Lead: ${data.service} — ${data.name}`,
-          from_name: "JCB Tech Hub Website",
           name: data.name,
           email: data.email,
           business: data.business || "Not specified",
           service: data.service,
           message: data.message,
+          _subject: `New Lead: ${data.service}`,
+          _template: "table",
         }),
       });
 
       const result = await res.json();
-      if (result.success) {
+      if (result.success === "true") {
         setStatus("sent");
       } else {
         setStatus("error");
