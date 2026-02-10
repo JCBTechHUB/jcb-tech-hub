@@ -38,11 +38,11 @@ export default function ContactPage() {
           message: data.message,
           _subject: `New Lead: ${data.service}`,
           _template: "table",
+          _captcha: "false",
         }),
       });
 
-      const result = await res.json();
-      if (result.success === "true") {
+      if (res.ok) {
         setStatus("sent");
       } else {
         setStatus("error");
